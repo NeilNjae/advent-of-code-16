@@ -52,7 +52,8 @@ expandSteps =
 
 -- Execute a series of steps, keeping track of the positions after each step
 takeSteps :: Position -> [Step] -> [Position]
-takeSteps pos steps = scanl move pos steps
+-- takeSteps pos steps = scanl move pos steps
+takeSteps = scanl move
 
 -- Make one move, by updating direction then position
 move :: Position -> Step -> Position
