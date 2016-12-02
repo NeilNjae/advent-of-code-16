@@ -4,11 +4,11 @@ import Data.Array.IArray
 type Position = (Int, Int)
 type Keyboard = Array Position Char
 
-kb1 = [['x', 'x', 'x', 'x', 'x'], 
-       ['x', '1', '2', '3', 'x'], 
-       ['x', '4', '5', '6', 'x'],
-       ['x', '7', '8', '9', 'x'],
-       ['x', 'x', 'x', 'x', 'x']]
+kb1 = ["xxxxx", 
+       "x123x", 
+       "x456x",
+       "x789x",
+       "xxxxx"]
 
 kb2 = ["xxxxxxx",
        "xxx1xxx",
