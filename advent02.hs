@@ -1,8 +1,6 @@
-import Data.List (sort)
-import Data.List.Split (splitOn)
 import Data.Array.IArray
 
-
+-- Row 1 is top, column 1 is left
 type Position = (Int, Int)
 type Keyboard = Array Position Char
 
@@ -11,7 +9,6 @@ kb1 = [['x', 'x', 'x', 'x', 'x'],
        ['x', '4', '5', '6', 'x'],
        ['x', '7', '8', '9', 'x'],
        ['x', 'x', 'x', 'x', 'x']]
-
 
 kb2 = ["xxxxxxx",
        "xxx1xxx",
@@ -31,7 +28,7 @@ keyboard1 = mkKeyboard kb1
 keyboard2 = mkKeyboard kb2
 
 findKey :: Keyboard -> Char-> Position
-findKey kb c = fst $ head $ filter (\(i, e) -> e == c) $ assocs kb
+findKey kb c = fst $ head $ filter (\a -> (snd a) == c) $ assocs kb
 
 -- data Coord = One | Two | Three
 --     deriving (Read, Show, Eq, Ord, Enum, Bounded)
@@ -39,7 +36,6 @@ findKey kb c = fst $ head $ filter (\(i, e) -> e == c) $ assocs kb
 -- --     minBound = Coord 1
 -- --     maxBound = Coord 3
 
--- -- Row 1 is top, column 1 is left
 -- data Position = Position Coord Coord
 --     deriving (Show, Eq)
 
@@ -81,34 +77,12 @@ safeMove :: Keyboard -> Position -> Char -> Position
 safeMove kb pos dir = maybeRevert kb pos (move pos dir)
 
 move :: Position -> Char -> Position
-move (r, c) 'U' = (dec r, c)
-move (r, c) 'D' = (inc r, c)
-move (r, c) 'L' = (r, dec c)
-move (r, c) 'R' = (r, inc c)
+move (r, c) 'U' = (r-1, c)
+move (r, c) 'D' = (r+1, c)
+move (r, c) 'L' = (r, c-1)
+move (r, c) 'R' = (r, c+1)
 
 maybeRevert :: Keyboard -> Position -> Position -> Position
 maybeRevert kb oldPos newPos 
     | kb ! newPos == 'x' = oldPos
     | otherwise = newPos
-
-numberOf p = '1'
--- numberOf :: Position -> Char
--- numberOf (Position One One) = '1'
--- numberOf (Position One Two) = '2'
--- numberOf (Position One Three) = '3'
--- numberOf (Position Two One) = '4'
--- numberOf (Position Two Two) = '5'
--- numberOf (Position Two Three) = '6'
--- numberOf (Position Three One) = '7'
--- numberOf (Position Three Two) = '8'
--- numberOf (Position Three Three) = '9'
-
--- | a `succ` that stops
-inc :: (Bounded a, Enum a, Eq a) => a -> a 
-inc dir | dir == maxBound = maxBound
-        | otherwise = succ dir
-
--- | a `pred` that stops
-dec :: (Bounded a, Enum a, Eq a) => a -> a
-dec dir | dir == minBound = minBound
-        | otherwise = pred dir
