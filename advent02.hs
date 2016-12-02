@@ -21,7 +21,7 @@ kb2 = ["xxxxxxx",
 enumerate = zip [0..]
 
 mkKeyboard :: [String] -> Keyboard
-mkKeyboard kb = array ((0, 0), (length kb - 1, length kb - 1))
+mkKeyboard kb = array ((0, 0), (length kb - 1, length (kb!!0) - 1))
     [((i, j), c) | (i, r) <- enumerate kb, (j, c) <- enumerate r]
 
 keyboard1 = mkKeyboard kb1
