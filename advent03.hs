@@ -23,7 +23,9 @@ part2 triangles = do
 parseLine :: String -> Triple
 parseLine = map (read) . filter (not . null) . splitOn " "
 
+validTriangle :: Triple -> Bool
 validTriangle triple = sortedTriple!!0 + sortedTriple!!1 > sortedTriple!!2
     where sortedTriple = sort triple
 
-byColumns triangles = chunksOf 3 $ concat $ transpose triangles
+byColumns :: [[Integer]] -> [Triple]
+byColumns = chunksOf 3 . concat . transpose 
