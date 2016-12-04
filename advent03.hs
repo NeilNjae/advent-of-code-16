@@ -1,5 +1,5 @@
-import Data.List
-import Data.List.Split
+import Data.List (transpose, sort)
+import Data.List.Split (splitOn, chunksOf)
 
 type Triple = [Integer]
 
