@@ -1,3 +1,5 @@
+module Main(main) where
+
 import Data.Array.IArray
 
 -- Row 1 is top, column 1 is left

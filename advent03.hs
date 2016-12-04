@@ -1,3 +1,5 @@
+module Main(main) where
+
 import Data.List (transpose, sort)
 import Data.List.Split (splitOn, chunksOf)
 

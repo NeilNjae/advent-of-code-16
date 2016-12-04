@@ -1,3 +1,5 @@
+module Main(main) where
+
 import Data.List (last, intersperse, sortBy, intercalate, isInfixOf)
 import Data.List.Split (splitOn)
 import Data.Char (isLetter, ord, chr)
