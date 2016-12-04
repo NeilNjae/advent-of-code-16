@@ -2,7 +2,6 @@ import Data.List (last, intersperse, sortBy, intercalate, isInfixOf)
 import Data.List.Split (splitOn)
 import Data.Char (isLetter, ord, chr)
 import qualified Data.Map.Lazy as Map
-import Data.Tuple (swap)
 
 data Room = Room { name :: String
                  , sector :: Int
@@ -26,7 +25,7 @@ part1 rooms = do
 
 part2 :: [Room] -> IO ()
 part2 rooms = do 
-    print $ filter (\sn -> isInfixOf "north" (snd sn)) sectorNames
+    print $ fst $ head $ filter (\sn -> isInfixOf "north" (snd sn)) sectorNames
     where 
         validChecksum room = (checksum room) == makeChecksum (name room)
         validRooms = filter (validChecksum) rooms
@@ -37,7 +36,6 @@ part2 rooms = do
 parseLine :: String -> Room
 parseLine line = Room {name=name, sector=sector, checksum=checksum}
     where components = splitOn "-" line
-          -- name = concat $ intersperse "-" $ reverse $ tail $ reverse components
           name = intercalate "-" $ reverse $ tail $ reverse components
           sector = read $ head $ splitOn "[" $ last components
           checksum = filter (isLetter) $ last components
