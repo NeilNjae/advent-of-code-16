@@ -38,7 +38,7 @@ dontReplace :: (Integer, Char) -> Password -> Password
 dontReplace (k, v) = Map.insertWith (\_ v -> v) k v
 
 findPassword :: Password -> [(Integer, Char)] -> Password
-findPassword p (candidate:candidates)
+findPassword p (c:cs)
   | Map.size p == 8 = p
-  | otherwise = findPassword p' candidates
-      where p' = dontReplace candidate p
+  | otherwise = findPassword p' cs
+      where p' = dontReplace c p
