@@ -13,6 +13,12 @@ $ sudo aptitude install haskell-platform
 ```
 ).
 
+I'm also using the `MissingH` library (install with 
+```
+$ cabal install MissingH
+```
+)
+
 Compile the code with
 ```
 ghc --make advent01.hs
