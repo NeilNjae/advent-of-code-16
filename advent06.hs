@@ -4,16 +4,12 @@ import Data.List (transpose)
 import Data.Char (isLetter)
 import qualified Data.Map.Lazy as Map
 
-
-input = "cxdnnyjw"
-
 main :: IO ()
 main = do 
     text <- readFile "advent06.txt" 
     let message = lines text
     part1 message
     part2 message
-
 
 part1 :: [String] -> IO ()
 part1 message = do 
@@ -22,7 +18,6 @@ part1 message = do
 part2 :: [String] -> IO ()
 part2 message = do 
     print $ map (fst) $ map (leastCommon) $ map (countedLetters) $ transpose message
-
 
 
 countedLetters :: String -> Map.Map Char Int
