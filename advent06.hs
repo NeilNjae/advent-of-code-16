@@ -1,7 +1,10 @@
+-- Better version of advent06.hs, using more standard library functions.
+
 module Main(main) where
 
-import Data.List (transpose)
+import Data.List (transpose, maximum, minimum)
 import Data.Char (isLetter)
+import Data.Tuple (swap)
 import qualified Data.Map.Lazy as Map
 
 main :: IO ()
@@ -13,24 +16,17 @@ main = do
 
 part1 :: [String] -> IO ()
 part1 message = do 
-    print $ map (fst) $ map (mostCommon) $ map (countedLetters) $ transpose message
+    putStrLn $ map (fst) $ map (mostCommon) $ map (countedLetters) $ transpose message
 
 part2 :: [String] -> IO ()
 part2 message = do 
-    print $ map (fst) $ map (leastCommon) $ map (countedLetters) $ transpose message
+    putStrLn $ map (fst) $ map (leastCommon) $ map (countedLetters) $ transpose message
 
+countedLetters :: String -> [(Char, Int)]
+countedLetters name = Map.toList $ Map.fromListWith (+) [(c, 1) | c <- filter (isLetter) name]
 
-countedLetters :: String -> Map.Map Char Int
-countedLetters name = Map.fromListWith (+) [(c, 1) | c <- filter (isLetter) name]
+mostCommon :: [(Char, Int)] -> (Char, Int)
+mostCommon = swap . maximum . map (swap)
 
-mostCommon = Map.foldlWithKey (mostCommonP) ('a', 0)
-
-mostCommonP (letter0, count0) letter count
-    | count > count0 = (letter, count)
-    | otherwise = (letter0, count0)
-
-leastCommon = Map.foldlWithKey (leastCommonP) ('a', maxBound :: Int)
-
-leastCommonP (letter0, count0) letter count
-    | count < count0 = (letter, count)
-    | otherwise = (letter0, count0)
+leastCommon :: [(Char, Int)] -> (Char, Int)
+leastCommon = swap . minimum . map (swap)
