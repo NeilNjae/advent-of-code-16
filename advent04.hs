@@ -44,7 +44,8 @@ parseLine line = Room {name=name, sector=sector, checksum=checksum}
 
 countedLetters :: String -> [(Char, Int)]
 countedLetters name = sortBy sortCLetter $ unsortedCountedLetters name
-    where unsortedCountedLetters name = Map.toList $ Map.fromListWith (+) [(c, 1) | c <- filter (isLetter) name]
+    where unsortedCountedLetters name = 
+            Map.toList $ Map.fromListWith (+) [(c, 1) | c <- filter (isLetter) name]
 
 sortCLetter :: (Char, Int) -> (Char, Int) -> Ordering
 sortCLetter (l1, n1) (l2, n2)
