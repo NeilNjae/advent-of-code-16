@@ -1,8 +1,7 @@
 module Main(main) where
 
-import Data.List (last, intersperse, sortBy, intercalate, isInfixOf, transpose)
-import Data.List.Split (splitOn)
-import Data.Char (isLetter, ord, chr)
+import Data.List (transpose)
+import Data.Char (isLetter)
 import qualified Data.Map.Lazy as Map
 
 
