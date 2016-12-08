@@ -38,11 +38,9 @@ part2 :: String -> IO ()
 part2 text = do 
     print $ length $ filter (supportsSSL) $ successfulParse $ parseI7f text
 
-
 allowsAbba :: [ChunkV] -> Bool
 allowsAbba chunks = (any (chunkValueV) includeChunks) && (not (any (chunkValueV) excludeChunks))
     where (includeChunks, excludeChunks) = partition (isIncludeV) chunks
-
 
 i7file = i7line `endBy` newline 
 i7line = many1 (includeChunk <|> excludeChunk)
@@ -55,14 +53,21 @@ includeChunk = Include <$> chunk
 hasABBA = preambleAbba <* (many alphaNum)
 preambleAbba = (try abba) <|> (alphaNum >> preambleAbba)
 
+-- abba = 
+--     do  a <- alphaNum
+--         b <- alphaNum
+--         if a == b then
+--             fail "Identical"
+--         else do char b
+--                 char a
+--                 return [a, b, b, a]
+
 abba = 
     do  a <- alphaNum
-        b <- alphaNum
-        if a == b then
-            fail "Identical"
-        else do char b
-                char a
-                return [a, b, b, a]
+        b <- noneOf [a]
+        char b
+        char a
+        return [a, b, b, a]
 
 i7filev = i7linev `endBy` newline
 i7linev = many1 (includeChunkv <|> excludeChunkv)
