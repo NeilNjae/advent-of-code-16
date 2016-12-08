@@ -1,6 +1,6 @@
 module Main(main) where
 
-import Data.List (last, intersperse, sortBy, intercalate, isInfixOf)
+import Data.List (last, intersperse, sortBy, intercalate, isInfixOf, init)
 import Data.List.Split (splitOn)
 import Data.Char (isLetter, ord, chr)
 import qualified Data.Map.Lazy as Map
@@ -38,7 +38,7 @@ part2 rooms = do
 parseLine :: String -> Room
 parseLine line = Room {name=name, sector=sector, checksum=checksum}
     where components = splitOn "-" line
-          name = intercalate "-" $ reverse $ tail $ reverse components
+          name = intercalate "-" $ init components
           sector = read $ head $ splitOn "[" $ last components
           checksum = filter (isLetter) $ last components
 
