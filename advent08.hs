@@ -22,8 +22,8 @@ mkScreen w h = array ((0, 0), (h - 1, w - 1))
 showScreen :: Screen -> String
 showScreen screen = unlines [showRow r | r <- [minRow..maxRow]]
     where ((minRow, minCol), (maxRow, maxCol)) = bounds screen
-          showCell True  = '#'
-          showCell False = '.'
+          showCell True  = '*'
+          showCell False = ' '
           showRow r = [showCell (screen!(r, c)) | c <- [minCol..maxCol]]
 
 countLights :: Screen -> Int
