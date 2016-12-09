@@ -1,6 +1,7 @@
 import Text.Parsec
 import Control.Applicative ((<$), (<*), (*>), liftA)
-import Data.List (partition, union, intersect)
+import Data.List (partition, union, intersect, tails)
+import Data.Char (isAlphaNum)
 
 data Chunk = Include String | Exclude String deriving (Show)
 data ChunkV = Includev Bool | Excludev Bool deriving (Show)
@@ -69,6 +70,15 @@ abba =
         char a
         return [a, b, b, a]
 
+--         where
+--   firstChar = satisfy (\a -> isLetter a || a == '_')
+--   nonFirstChar = satisfy (\a -> isDigit a || isLetter a || a == '_')
+
+   -- b <- bChar
+-- where bChar = satisfy (\l -> lsLetter l && l /= a)
+
+
+
 i7filev = i7linev `endBy` newline
 i7linev = many1 (includeChunkv <|> excludeChunkv)
 
@@ -102,9 +112,11 @@ successfulParse (Right a) = a
 
 
 allSubstrings :: Int -> [a] -> [[a]]
-allSubstrings n es 
-    | length es < n = []
-    | otherwise = (take n es) : (allSubstrings n $ tail es)
+-- allSubstrings n es 
+--     | length es < n = []
+--     | otherwise = (take n es) : (allSubstrings n $ tail es)
+allSubstrings n e = filter (\s -> length s == n) $ map (take n) $ tails e
+
 
 ieCandidates :: [Chunk] -> ([String], [String])
 ieCandidates chunks = (includeCandidates, excludeCandidates)
