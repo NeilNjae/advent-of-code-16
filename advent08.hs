@@ -19,7 +19,6 @@ mkScreen :: Int -> Int -> Screen
 mkScreen w h = array ((0, 0), (h - 1, w - 1))
     [((i, j), False) | i <- [0..(h-1)], j <- [0..(w-1)]]
 
-
 showScreen :: Screen -> String
 showScreen screen = unlines [showRow r | r <- [minRow..maxRow]]
     where ((minRow, minCol), (maxRow, maxCol)) = bounds screen
@@ -32,14 +31,6 @@ countLights screen = length $ filter (id) $ elems screen
 
 screen0 = mkScreen 50 6
 
-instrs = [ Rect 3 2
-         , Rotate Column 1 1
-         , Rotate Row 0 4
-         , Rotate Column 1 1
-         , Rotate Row 1 6
-         , Rotate Row 2 8
-         , Rect 1 3
-         ]
 
 main :: IO ()
 main = do
@@ -50,12 +41,13 @@ main = do
     part2 instrs
 
 part1 :: [Command] -> IO ()
-part1 instructions = 
-    putStrLn $ showScreen $ (extractScreen . doInstructions) instructions
+part1 commands =
+    print $ countLights $ (extractScreen . doCommands) commands
 
 part2 :: [Command] -> IO ()
-part2 instructions =
-    print $ countLights $ (extractScreen . doInstructions) instructions
+part2 commands = 
+    putStrLn $ showScreen $ (extractScreen . doCommands) commands
+
 
 instance Functor ScState where
   fmap = liftM
@@ -64,7 +56,7 @@ instance Applicative ScState where
   pure  = return
   (<*>) = ap
 
-instance Monad (ScState) where
+instance Monad ScState where
     return x = ScState (\screen -> (screen, x))
 
     (ScState st) >>= f
@@ -74,18 +66,22 @@ instance Monad (ScState) where
                             in
                             transformer newScreen)
 
-doInstructions [] = return 0
-doInstructions (i:is) = 
-    do doInstruction i
-       doInstructions is
+doCommands :: [Command] -> ScState (Int)
+doCommands [] = return 0
+doCommands (i:is) = 
+    do doCommand i
+       doCommands is
        return 0
 
-doInstruction i = ScState (execute i)
+doCommand :: Command -> ScState Int
+doCommand i = ScState (execute i)
 
+execute :: Command -> (Screen -> (Screen, Int))
 execute (Rect w h) screen = (rect screen w h, 0)
 execute (Rotate Column c n) screen = (rotateColumn screen c n, 0)
 execute (Rotate Row r n) screen = (rotateRow screen r n, 0)
 
+extractScreen :: ScState Int -> Screen
 extractScreen (ScState st) = fst (st screen0)
 
 parseCommands :: String -> Either ParseError [Command]
