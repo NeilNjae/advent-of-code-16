@@ -29,6 +29,7 @@ showScreen screen = unlines [showRow r | r <- [minRow..maxRow]]
 countLights :: Screen -> Int
 countLights screen = length $ filter (id) $ elems screen
 
+screen0 :: Screen
 screen0 = mkScreen 50 6
 
 
@@ -36,7 +37,6 @@ main :: IO ()
 main = do
     text <- readFile "advent08.txt"
     let instrs = successfulParse $ parseCommands text
-    -- print instrs
     part1 instrs
     part2 instrs
 
@@ -83,6 +83,8 @@ execute (Rotate Row r n) screen = (rotateRow screen r n, 0)
 
 extractScreen :: ScState Int -> Screen
 extractScreen (ScState st) = fst (st screen0)
+
+
 
 parseCommands :: String -> Either ParseError [Command]
 parseCommands input = parse commandFile "(unknown)" input
