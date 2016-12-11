@@ -136,22 +136,15 @@ addInstructions (i:is) = do
 
 
 addInstruction :: Instruction -> State Factory ()
-addInstruction r@(Rule {}) = 
+addInstruction r@(Rule {lowDestType = ld, lowDestId = li,
+                     highDestType = hd, highDestId = hi}) = 
     do (places, rules, history) <- get
        put (places, r:rules, history)
-       addPlace (Place {placeType = (lowDestType r), placeId = (lowDestId r), items = []})
-       addPlace (Place {placeType = (highDestType r), placeId = (highDestId r), items = []})
+       addPlace (Place {placeType = ld, placeId = li, items = []})
+       addPlace (Place {placeType = hd, placeId = hi, items = []})
+addInstruction Gift {giftId = g} = 
+    do addPlace (Place {placeType = Bot, placeId = g, items = []})
 
-addInstruction g@(Gift {}) = 
-    -- do (botstates, rules, history) <- get
-    --    let (bot, otherBots) = getBot receivingBot botstates
-    --    let rBot = BotState {botId = (botId bot), items = (value:(items bot))}
-    --    put (rBot:otherBots, rules, history)
-    do addPlace (Place {placeType = Bot, placeId = (giftId g), items = []})
-
--- propogateUpdates :: State Factory ()
--- propogateUpdates = State $ \factory -> ((), factory')
---     where 
 
 addPlace :: Place -> State Factory ()
 addPlace place = 
@@ -169,10 +162,9 @@ runInstructions (i:is) =
 
 
 runInstruction :: Instruction -> State Factory ()
-runInstruction r@(Rule {}) = return ()
+runInstruction Rule {} = return ()
 runInstruction g@(Gift {}) = 
-    do  (places, rules, history) <- get
-        updatePlace (giftId g) Bot (value g)
+    do  updatePlace (giftId g) Bot (value g)
         propogateUpdates
 
 updatePlace :: Int -> Destination -> Int -> State Factory ()
@@ -224,9 +216,3 @@ findRule instructions bot = find ruleForBot instructions
           ruleForBot Rule {ruleId = b}
             | b == bot = True
             | otherwise = False
-
--- getPlace :: Place -> [Place] -> (Place, [Place])
--- getBot botID bots = ((head foundBots), otherbots)
---     where (foundBots, otherbots) = partition (\b -> (botId b) == botID) bots
-
-
