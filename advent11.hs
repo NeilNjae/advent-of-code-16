@@ -48,22 +48,22 @@ main = do
 
 
 part1 :: IO ()
--- part1 = print $ length $ init $ extractJust $ aStar [[buildingTest]] []
-part1 = print $ length $ init $ extractJust $ aStar [[building1]] []
+-- part1 = print $ length $ init $ extractJust $ hillClimb [[buildingTest]] []
+part1 = print $ length $ init $ extractJust $ hillClimb [[building1]] []
 
 part2 :: IO ()
-part2 = print $ length $ init $ extractJust $ aStar [[building2]] []
+part2 = print $ length $ init $ extractJust $ hillClimb [[building2]] []
 
 
 extractJust :: Maybe [a] -> [a]
 extractJust Nothing = []
 extractJust (Just x) = x
 
-aStar :: [[Building]] -> [Building] -> Maybe [Building]
-aStar [] _ = Nothing
-aStar (currentTrail:trails) closed = 
+hillClimb :: [[Building]] -> [Building] -> Maybe [Building]
+hillClimb [] _ = Nothing
+hillClimb (currentTrail:trails) closed = 
     if isGoal (head currentTrail) then Just currentTrail
-    else aStar newAgenda ((head currentTrail): closed) 
+    else hillClimb newAgenda ((head currentTrail): closed) 
     where newAgenda = 
             sortBy (\t1 t2 -> (head t1) `compare` (head t2)) $ 
             trails ++ (candidates currentTrail closed)
