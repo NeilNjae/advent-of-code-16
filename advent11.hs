@@ -110,10 +110,8 @@ legalSuccessors :: [Building] -> [Building]
 legalSuccessors = filter (isLegal)
 
 updateBuilding :: Int -> [Floor] -> Int -> [Item] -> Building
--- updateBuilding f floors _ _ = Building f floors
 updateBuilding oldF oldFloors newF items = Building newF newFloors
-    where numberedFloors = zip [0..] oldFloors
-          newFloors = map (updateFloor) numberedFloors
+    where newFloors = map (updateFloor) $ zip [0..] oldFloors
           updateFloor (f, fl) 
             | f == oldF = sort $ fl \\ items
             | f == newF = sort $ items ++ fl
