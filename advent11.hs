@@ -44,13 +44,13 @@ buildingTest = Building 0 [
 main :: IO ()
 main = do 
     part1 
-    -- part2 
+    part2 
 
 
 part1 :: IO ()
 -- part1 = print $ length $ init $ extractJust $ hillClimb [[buildingTest]] []
--- part1 = print $ length $ init $ extractJust $ hillClimb [[building1]] []
-part1 = print $ length $ init $ extractJust $ aStar [[building1]] []
+part1 = print $ length $ init $ extractJust $ hillClimb [[building1]] []
+-- part1 = print $ length $ init $ extractJust $ aStar [[building1]] []
 
 part2 :: IO ()
 part2 = print $ length $ init $ extractJust $ hillClimb [[building2]] []
