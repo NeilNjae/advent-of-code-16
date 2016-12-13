@@ -1,5 +1,6 @@
 import Data.List ((\\), nub, sortOn)
 import Data.Bits (popCount)
+import Data.Maybe (fromMaybe)
 
 type Pos = (Int, Int)
 
@@ -14,19 +15,19 @@ main = do
 
 
 part1 :: IO ()
-part1 = print $ length $ tail $ extractJust $ aStar [[(1, 1)]] []
+part1 = print $ length $ tail $ fromMaybe [] $ aStar [[(1, 1)]] []
 
 part2 :: IO ()
 part2 = do print $ length $ tail $ edl 50 [[(1, 1)]] []
            putStrLn $ showRoomR 30 25 $ edl 50 [[(1, 1)]] []
 
 
-extractJust :: Maybe [a] -> [a]
-extractJust Nothing = []
-extractJust (Just x) = x
-
+-- extractJust :: Maybe [a] -> [a]
+-- extractJust Nothing = []
+-- extractJust (Just x) = x
+ 
 isWall :: Int -> Int -> Bool
-isWall x y = (popCount n) `mod` 2 == 1
+isWall x y = odd $ popCount n
     where 
         n = x*x + 3*x + 2*x*y + y + y*y + seed
 
