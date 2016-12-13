@@ -1,9 +1,5 @@
 import Data.List ((\\), nub, sortOn)
-import Numeric (showIntAtBase)
-import Data.Char (intToDigit)
 import Data.Bits (popCount)
-
-import qualified Data.Map.Lazy as Map -- day 4, 5
 
 type Pos = (Int, Int)
 
@@ -23,7 +19,6 @@ part1 = print $ length $ tail $ extractJust $ aStar [[(1, 1)]] []
 part2 :: IO ()
 part2 = do print $ length $ tail $ edl 50 [[(1, 1)]] []
            putStrLn $ showRoomR 30 25 $ edl 50 [[(1, 1)]] []
--- part2 = print $ length $ tail $ edl 50 [[(1, 1)]] []
 
 
 extractJust :: Maybe [a] -> [a]
@@ -36,11 +31,7 @@ isWall x y = (popCount n) `mod` 2 == 1
         n = x*x + 3*x + 2*x*y + y + y*y + seed
 
 
-showRoom w h = unlines rows
-    where 
-        rows = [row x | x <- [0..h]]
-        row x = [showCell x y | y <- [0..w]]
-        showCell x y = if (isWall x y) then '#' else '.'
+showRoom w h = showRoomR w h []
 
 showRoomR w h reached = unlines rows
     where 
