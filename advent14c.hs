@@ -43,4 +43,3 @@ repeats n = filter (null . tail) . map (nub) . substrings n
 
 substrings :: Int -> [a] -> [[a]]
 substrings l = filter (\s -> (length s) == l) . map (take l) . tails
-
