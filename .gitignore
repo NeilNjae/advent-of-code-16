@@ -36,3 +36,5 @@ cabal.project.local
 # Logs
 *.log
 
+# KDE
+.directory

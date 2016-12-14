@@ -13,13 +13,13 @@ $ sudo aptitude install haskell-platform
 ```
 ).
 
-I'm also using some extra libraries (install with 
+I'm also using some extra libraries. Before installing, run `cabal update` then set `library-profiling: True` in `~/.cabal/config` . Then install the packages with  
 ```
 $ cabal install MissingH
-$ cabal install parsec-number
+$ cabal install parsec-numbers
 $ cabal install cryptonite
+$ cabal install pqueue
 ```
-)
 
 Compile the code with
 ```
@@ -30,6 +30,14 @@ then run it as
 ```
 advent01
 ```
+
+If you're profiling, compile and run with 
+```
+ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp
+time ./advent01 +RTS -p -hy
+```
+
+and create the profile picture with `h2ps advent01.hp` . 
 
 Build this readme file wth
 ```
