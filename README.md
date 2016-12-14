@@ -13,10 +13,11 @@ $ sudo aptitude install haskell-platform
 ```
 ).
 
-I'm also using the `MissingH` and `Parsec-number` libraries (install with 
+I'm also using some extra libraries (install with 
 ```
 $ cabal install MissingH
 $ cabal install parsec-number
+$ cabal install cryptonite
 ```
 )
 
