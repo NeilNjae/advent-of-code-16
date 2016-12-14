@@ -1,8 +1,6 @@
 import Data.List (subsequences, (\\), sort, sortOn, nub, findIndices)
 import Data.Ord (comparing)
 import Data.Char (isDigit)
-import Data.Maybe (fromMaybe)
-import qualified Data.PQueue.Prio.Min as P
 
 data Item = Generator String | Microchip String deriving (Show, Eq)
 type Floor = [Item]
@@ -10,7 +8,6 @@ data Building = Building Int [Floor] deriving (Show, Eq)
 -- data CBuilding = CBuilding Int [(Int, Int)] deriving (Show, Eq)
 data CBuilding = CBuilding Int Integer deriving (Show, Eq)
 data Agendum = Agendum {current :: Building, trail :: [CBuilding], cost :: Int}
-type Agenda = P.MinPQueue Int Agendum
 
 instance Ord Item where
     compare (Generator a) (Generator b) = compare a b
@@ -57,6 +54,7 @@ buildingTest = Building 0 [
     []]
 
 canonical :: Building -> CBuilding
+-- canonical (Building f floors) = CBuilding f (sort pairs)
 canonical (Building f floors) = CBuilding f (read $ filter (isDigit) $ show $ sort pairs)
     where names = nub $ map (\(Generator n) -> n) $ filter (isGenerator) $ concat floors
           floorOf (Generator g) = head (findIndices 
@@ -68,39 +66,44 @@ canonical (Building f floors) = CBuilding f (read $ filter (isDigit) $ show $ so
           pairs = foldl (\ps n -> (floorOf (Generator n), floorOf (Microchip n)):ps) [] names
 
 
+
 main :: IO ()
 main = do 
     part1 
     part2 
 
+
 part1 :: IO ()
-part1 = print $ length $ trail $ fromMaybe (snd $ P.findMin $ initAgenda buildingTest) $ aStar (initAgenda building1) []
+part1 = print $ length $ trail $ hillClimb (initAgenda building1) []
+-- part1 = print $ length $ trail $
+--             aStar [Agendum {current = building1, trail=[], cost = estimateCost building1}] []
+
+-- part2 :: IO ()
+-- part2 = print $ length $ init $ extractJust $ aStar [[building2]] []
 
 part2 :: IO ()
-part2 = print $ length $ trail $ fromMaybe (snd $ P.findMin $ initAgenda buildingTest) $ aStar (initAgenda building2) []
+part2 = print $ length $ trail $ hillClimb (initAgenda building2) []
 
-initAgenda :: Building -> Agenda
-initAgenda b = P.singleton (estimateCost b) Agendum {current = b, trail=[], cost = estimateCost b}
+initAgenda :: Building -> [Agendum]
+initAgenda b = [Agendum {current = b, trail=[], cost = estimateCost b}]
 
-
-aStar :: Agenda -> [CBuilding] -> Maybe Agendum
--- aStar [] _ = Agendum {current=buildingTest, trail=[], cost=0}
-aStar agenda closed 
-    | P.null agenda = Nothing
-    | otherwise = 
-        if isGoal reached then Just currentAgendum
-        else if creached `elem` closed 
-            then aStar (P.deleteMin agenda) closed
-            else aStar newAgenda (creached:closed) 
-        where 
-            (_, currentAgendum) = P.findMin agenda
-            reached = current currentAgendum
-            creached = canonical reached
-            newAgenda = P.union (P.deleteMin agenda) 
-                                (P.fromList $ candidates currentAgendum closed)
+hillClimb :: [Agendum] -> [CBuilding] -> Agendum
+hillClimb [] _ = Agendum {current=buildingTest, trail=[], cost=0}
+hillClimb (currentAgendum:agenda) closed = 
+    if isGoal reached then currentAgendum
+    else if creached `elem` closed 
+        then hillClimb agenda closed
+        else hillClimb newAgenda (creached:closed) 
+    where 
+        reached = current currentAgendum
+        creached = canonical reached
+        newAgenda = 
+            -- sortBy (\t1 t2 -> (cost t1) `compare` (cost t2)) $ 
+            sortOn (cost) $ 
+            agenda ++ (candidates currentAgendum closed)
 
 
-candidates :: Agendum -> [CBuilding] -> [(Int, Agendum)]
+candidates :: Agendum -> [CBuilding] -> [Agendum]
 candidates agendum closed = newCandidates
     where
         candidate = current agendum
@@ -109,10 +112,10 @@ candidates agendum closed = newCandidates
         -- nonloops = (succs \\ previous) \\ closed
         excludable = previous ++ closed
         nonloops = filter (\s -> not $ (canonical s) `elem` excludable) succs
-        newCandidates = map (\a -> (cost a, a)) $ map (\n -> makeAgendum n) nonloops
+        newCandidates = map (\n -> makeAgendum n) nonloops
         makeAgendum new = Agendum {current = new, 
                                     trail = (canonical candidate):previous, 
-                                    cost = estimateCost new + length previous + 1}
+                                    cost = estimateCost new}
 
 isGoal :: Building -> Bool
 isGoal (Building f floors) =
