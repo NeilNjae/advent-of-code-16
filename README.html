@@ -27,11 +27,11 @@ $ cabal install pqueue</code></pre>
 <p>then run it as</p>
 <pre><code>advent01</code></pre>
 <p>If you're profiling, compile and run with</p>
-<pre><code>ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp
+<pre><code>ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp -rstopts
 time ./advent01 +RTS -p -hy</code></pre>
 <p>and create the profile picture with <code>h2ps advent01.hp</code> .</p>
 <p>Build this readme file wth</p>
 <pre><code>pandoc -s README.md &gt; README.html</code></pre>
-<p>(Using the <a href="https://github.com/markdowncss/modest">Modest styles</a>.)</p>
+<p>(Using the <a href="https://github.com/markdowncss/modest">Modest style</a>.)</p>
 </body>
 </html>
