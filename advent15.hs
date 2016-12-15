@@ -15,7 +15,6 @@ part1 disks = print $ head $ filter (canFall disks) [0..]
 
 part2 :: [Disk] -> IO ()
 part2 disks = print $ head $ filter (canFall disks2) [0..]
-    -- where disks2 = disks ++ [(\i -> (11 + 7 + 0 + i) `mod` 11 == 0)]
     where disks2 = disks ++ [diskify 7 11 0]
 
 canFall :: [Disk] -> Int -> Bool
