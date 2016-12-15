@@ -33,7 +33,7 @@ advent01
 
 If you're profiling, compile and run with 
 ```
-ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp
+ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp -rstopts
 time ./advent01 +RTS -p -hy
 ```
 
@@ -44,4 +44,4 @@ Build this readme file wth
 pandoc -s README.md > README.html
 ```
 
-(Using the [Modest styles](https://github.com/markdowncss/modest).)
+(Using the [Modest style](https://github.com/markdowncss/modest).)
