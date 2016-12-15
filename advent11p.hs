@@ -106,9 +106,9 @@ candidates agendum closed = newCandidates
         candidate = current agendum
         previous = trail agendum
         succs = legalSuccessors $ successors candidate
-        -- nonloops = (succs \\ previous) \\ closed
-        excludable = previous ++ closed
-        nonloops = filter (\s -> not $ (canonical s) `elem` excludable) succs
+        -- excludable = previous ++ closed
+        -- nonloops = filter (\s -> not $ (canonical s) `elem` excludable) succs
+        nonloops = filter (\s -> not $ (canonical s) `elem` closed) succs
         newCandidates = map (\a -> (cost a, a)) $ map (\n -> makeAgendum n) nonloops
         makeAgendum new = Agendum {current = new, 
                                     trail = (canonical candidate):previous, 
