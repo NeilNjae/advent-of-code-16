@@ -1,3 +1,9 @@
+-- Using the idea of canonical representation of buildings from
+-- https://andars.github.io/aoc_day11.html by Andrew Foote,
+-- plus my extension of represening the pairs as an integer.
+
+-- This version is A* search, using a list for the agenda.
+
 import Data.List (subsequences, (\\), sort, sortOn, nub, findIndices)
 import Data.Ord (comparing)
 import Data.Char (isDigit)
@@ -5,7 +11,6 @@ import Data.Char (isDigit)
 data Item = Generator String | Microchip String deriving (Show, Eq)
 type Floor = [Item]
 data Building = Building Int [Floor] deriving (Show, Eq)
--- data CBuilding = CBuilding Int [(Int, Int)] deriving (Show, Eq)
 data CBuilding = CBuilding Int Integer deriving (Show, Eq)
 data Agendum = Agendum {current :: Building, trail :: [CBuilding], cost :: Int}
 
@@ -54,7 +59,6 @@ buildingTest = Building 0 [
     []]
 
 canonical :: Building -> CBuilding
--- canonical (Building f floors) = CBuilding f (sort pairs)
 canonical (Building f floors) = CBuilding f (read $ filter (isDigit) $ show $ sort pairs)
     where names = nub $ map (\(Generator n) -> n) $ filter (isGenerator) $ concat floors
           floorOf (Generator g) = head (findIndices 
@@ -75,11 +79,6 @@ main = do
 
 part1 :: IO ()
 part1 = print $ length $ trail $ aStar (initAgenda building1) []
--- part1 = print $ length $ trail $
---             aStar [Agendum {current = building1, trail=[], cost = estimateCost building1}] []
-
--- part2 :: IO ()
--- part2 = print $ length $ init $ extractJust $ aStar [[building2]] []
 
 part2 :: IO ()
 part2 = print $ length $ trail $aStar (initAgenda building2) []
@@ -99,7 +98,6 @@ aStar (currentAgendum:agenda) closed =
         reached = current currentAgendum
         creached = canonical reached
         newAgenda = 
-            -- sortBy (\t1 t2 -> (cost t1) `compare` (cost t2)) $ 
             sortOn (cost) $ 
             agenda ++ (candidates currentAgendum closed)
 
@@ -110,7 +108,6 @@ candidates agendum closed = newCandidates
         candidate = current agendum
         previous = trail agendum
         succs = legalSuccessors $ successors candidate
-        -- nonloops = (succs \\ previous) \\ closed
         excludable = previous ++ closed
         nonloops = filter (\s -> not $ (canonical s) `elem` excludable) succs
         newCandidates = map (\n -> makeAgendum n) nonloops

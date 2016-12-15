@@ -1,3 +1,9 @@
+-- Using the idea of canonical representation of buildings from
+-- https://andars.github.io/aoc_day11.html by Andrew Foote,
+-- plus my extension of represening the pairs as an integer.
+
+-- This version is A* search, using a priority queue for the agenda.
+
 import Data.List (subsequences, (\\), sort, sortOn, nub, findIndices)
 import Data.Ord (comparing)
 import Data.Char (isDigit)
@@ -7,7 +13,6 @@ import qualified Data.PQueue.Prio.Min as P
 data Item = Generator String | Microchip String deriving (Show, Eq)
 type Floor = [Item]
 data Building = Building Int [Floor] deriving (Show, Eq)
--- data CBuilding = CBuilding Int [(Int, Int)] deriving (Show, Eq)
 data CBuilding = CBuilding Int Integer deriving (Show, Eq)
 data Agendum = Agendum {current :: Building, trail :: [CBuilding], cost :: Int}
 type Agenda = P.MinPQueue Int Agendum
@@ -106,8 +111,6 @@ candidates agendum closed = newCandidates
         candidate = current agendum
         previous = trail agendum
         succs = legalSuccessors $ successors candidate
-        -- excludable = previous ++ closed
-        -- nonloops = filter (\s -> not $ (canonical s) `elem` excludable) succs
         nonloops = filter (\s -> not $ (canonical s) `elem` closed) succs
         newCandidates = map (\a -> (cost a, a)) $ map (\n -> makeAgendum n) nonloops
         makeAgendum new = Agendum {current = new, 
