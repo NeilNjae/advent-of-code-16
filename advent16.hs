@@ -32,10 +32,7 @@ checksum :: String -> String
 checksum digits
     | odd $ length digits = digits
     | otherwise = checksum $ map (checksumPair) $ pairs digits
-
-
-checksumPair :: String -> Char
-checksumPair p = if (length $ nub p) == 1 then '1' else '0'
+        where checksumPair p = if (length $ nub p) == 1 then '1' else '0'
 
 
 pairs :: [a] -> [[a]]
