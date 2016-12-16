@@ -12,8 +12,8 @@ part1 :: [[Int]] -> IO ()
 part1 disks = print $ head $ filter (canFall disks) [0..]
 
 part2 :: [[Int]] -> IO ()
-part2 disks = print $ head $ filter (canFall disks2) [0..5000000]
-    where disks2 = id $! map (take 5000000) $ disks ++ [drop 7 $ drop 0 $ cycle [0..(11-1)]]
+part2 disks = print $ head $ filter (canFall disks2) [0..]
+    where disks2 = disks ++ [drop 7 $ drop 0 $ cycle [0..(11-1)]]
 
 canFall :: [[Int]] -> Int -> Bool
 canFall ds i = all (\d -> (d!!i) == 0) ds
