@@ -61,13 +61,14 @@ successors state = [Agendum {position = step p0 ld,
         legalDoors = filter (isLegalPos . (step p0)) doors
 
 openDoors :: String -> String
-openDoors h = (u h) ++ (d h) ++ (l h) ++ (r h)
+openDoors h = up ++ down ++ left ++ right
+    where
+        up    = if h!!0 `elem` "bcdef" then "U" else ""
+        down  = if h!!1 `elem` "bcdef" then "D" else ""
+        left  = if h!!2 `elem` "bcdef" then "L" else ""
+        right = if h!!3 `elem` "bcdef" then "R" else ""
 
-u h = if h!!0 `elem` "bcdef" then "U" else ""
-d h = if h!!1 `elem` "bcdef" then "D" else ""
-l h = if h!!2 `elem` "bcdef" then "L" else ""
-r h = if h!!3 `elem` "bcdef" then "R" else ""
-
+step :: Position -> Char -> Position
 step (r, c) 'U' = (r-1, c)
 step (r, c) 'D' = (r+1, c)
 step (r, c) 'L' = (r, c-1)
