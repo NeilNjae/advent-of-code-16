@@ -4,12 +4,10 @@ import Data.List (iterate, tails)
 -- input = ".^^.^.^^^^"
 input = "^.^^^.^..^....^^....^^^^.^^.^...^^.^.^^.^^.^^..^.^...^.^..^.^^.^..^.....^^^.^.^^^..^^...^^^...^...^."
 
-
 main :: IO ()
 main = do 
         part1 
         part2
-
 
 part1 :: IO ()
 -- part1 = putStrLn $ unlines $ map (showRow) $ take 10 $ iterate nextRow $ readRow input
