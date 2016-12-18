@@ -36,5 +36,9 @@ cabal.project.local
 # Logs
 *.log
 
+# Profile exports
+*.ps
+
 # KDE
 .directory
+
