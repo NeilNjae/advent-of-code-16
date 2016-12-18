@@ -1,4 +1,4 @@
-import Data.List (tails)
+import Data.List (tails, foldl')
 
 -- input = "..^^."
 -- input = ".^^.^.^^^^"
@@ -10,11 +10,11 @@ main = do
         part2
 
 part1 :: IO ()
-part1 = print $ fst $ foldl nextRowFold (countSafe row, row) [2..40]
+part1 = print $ fst $ foldl' nextRowFold (countSafe row, row) [2..40]
     where row = readRow input
 
 part2 :: IO ()
-part2 = print $ fst $ foldl nextRowFold (countSafe row, row) [2..400000]
+part2 = print $ fst $ foldl' nextRowFold (countSafe row, row) [2..400000]
     where row = readRow input
 
 readRow :: String -> [Bool]
