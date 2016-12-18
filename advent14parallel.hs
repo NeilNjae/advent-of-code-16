@@ -1,10 +1,13 @@
 import Data.List (nub, tails)
 import Data.ByteString.Char8 (pack)
 import Crypto.Hash (hash, Digest, MD5)
-import Control.Parallel.Strategies (parMap, rdeepseq)
+import Control.Parallel.Strategies (withStrategy, parBuffer, rdeepseq)
 
 salt = "yjdafjpo"
 -- salt = "abc"
+
+stretch_factor = [1..2016]
+-- stretch_factor = [1..100]
 
 main :: IO ()
 main = do 
@@ -24,14 +27,14 @@ getHash bs = show (hash $ pack bs :: Digest MD5)
 
 md5sequence :: [String]
 -- md5sequence = [makeMd5 i | i <- [0..]]
-md5sequence = parMap rdeepseq (makeMd5) [0..]
+md5sequence = withStrategy (parBuffer 100 rdeepseq) $ map (makeMd5) [0..]
     where makeMd5 i = getHash (salt ++ show i)
 
 md5sequenceS :: [String]
 -- md5sequenceS = [makeMd5 i | i <- [0..]]
-md5sequenceS = parMap rdeepseq (makeMd5) [0..]
+md5sequenceS = withStrategy (parBuffer 100 rdeepseq) $ map (makeMd5) [0..]
     where makeMd5 i = stretch $ getHash (salt ++ show i)
-          stretch h0 = foldr (\_ h -> getHash h) h0 [1..2016]
+          stretch h0 = foldr (\_ h -> getHash h) h0 stretch_factor
 
 possibleKey :: [String] -> Int-> Bool
 possibleKey s = not . null . repeats 3 . ((!!) s)
