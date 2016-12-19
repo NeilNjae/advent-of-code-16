@@ -13,7 +13,7 @@ part1 :: IO ()
 part1 = print $ 2 * (input - 2 ^ (toInteger (floor $ logBase 2 (fromIntegral input)))) + 1
 
 part2 :: IO ()
-part2 = print $ index (presentSteps initial) 0
+part2 = print $ flip index 0 $ presentSteps initial
 
 presentSteps :: Seq Int -> Seq Int
 presentSteps elves 
