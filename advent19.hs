@@ -1,5 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-
 import Prelude hiding (length, take, drop)
 import Data.Sequence
 
