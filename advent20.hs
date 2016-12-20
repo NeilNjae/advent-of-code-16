@@ -19,7 +19,7 @@ main = do
     text <- readFile "advent20.txt" 
     let intervals = successfulParse $ parseIfile text
     part1 intervals
-    -- part2
+    part2 intervals
 
 part1 :: [Interval] -> IO ()
 part1 intervals = print $ (+1) $ high $ head $ foldl' (mergeAdjacent) [] $ foldl' (merge) [] intervals
@@ -28,8 +28,8 @@ part2 :: [Interval] -> IO ()
 part2 intervals = do
     let ints = foldl' (mergeAdjacent) [] $ foldl' (merge) [] intervals
     let gapCount = gaps ints
-    let lowGap = max [0, ((low $ head ints) -1)]
-    let highGap = 4294967295 - (min [4294967295, ((high $ last ints) + 1)])
+    let lowGap = low $ head ints
+    let highGap = 4294967295 - (high $ last ints)
     print (lowGap + gapCount + highGap)
 
 -- 4294967295
