@@ -1,4 +1,4 @@
-import Text.Parsec hiding (State)
+import Text.Parsec 
 import Text.ParserCombinators.Parsec.Number
 import Control.Applicative ((<$), (<*), (*>), (<*>), liftA)
 import Data.List (foldl')
@@ -10,9 +10,6 @@ low (Interval l _) = l
 
 high :: Interval -> Int
 high (Interval _ h) = h
-
--- input = 5 
-input = 3012210 
 
 main :: IO ()
 main = do 
@@ -31,9 +28,6 @@ part2 intervals = do
     let lowGap = low $ head ints
     let highGap = 4294967295 - (high $ last ints)
     print (lowGap + gapCount + highGap)
-
--- 4294967295
-
 
 disjoint :: Interval -> Interval -> Bool
 disjoint (Interval a b) (Interval c d)
@@ -62,24 +56,17 @@ mergeAdjacent (i1:intervals) i0
     | low i0 == high i1 + 1 = (Interval (low i1) (high i0)):intervals
     | otherwise = i1:(mergeAdjacent intervals i0)
 
-
 gaps :: [Interval] -> Int
 gaps [] = 0
 gaps [_] = 0
 gaps ((Interval _ b):(Interval c d):intervals) = 
     (c - b - 1) + gaps ((Interval c d):intervals)
 
-
 intervalFile = intervalLine `endBy` newline 
--- IntervalLine = choice [cpyL, incL, decL, jnzL]
 intervalLine = Interval <$> int <*> (string "-" *> int)
-
 
 parseIfile :: String -> Either ParseError [Interval]
 parseIfile input = parse intervalFile "(unknown)" input
-
-parseIline :: String -> Either ParseError Interval
-parseIline input = parse intervalLine "(unknown)" input
 
 successfulParse :: Either ParseError [a] -> [a]
 successfulParse (Left _) = []
