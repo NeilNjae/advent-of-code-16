@@ -1,6 +1,5 @@
 import Text.Parsec hiding (State)
 import Text.ParserCombinators.Parsec.Number
--- import Control.Applicative ((<*), (*>), (<*>))
 import Data.Maybe (fromJust)
 import Data.List (elemIndex)
 
@@ -58,15 +57,19 @@ main = do
 
 part1 :: [Instruction] -> String -> IO ()
 part1 instructions start = 
-    let state = Password {password = start}
-    in print $ runIdentity (runStateT (runWriterT (apply instructions)) state)
-    -- in putStrLn $ password $ runIdentity (execStateT (runWriterT (apply instructions)) state)
+    let st = Password {password = start}
+        ((_, log), st') = runIdentity (runStateT (runWriterT (apply instructions)) st)
+    in do 
+        -- putStrLn $ unlines $ map (action) log
+        putStrLn $ password st'
 
 part2 :: [Instruction] -> String -> IO ()
 part2 instructions end = 
-    let state = Password {password = end}
-    in print $ runIdentity (runStateT (runWriterT (unApply instructions)) state)
-    -- in putStrLn $ password $ runIdentity (execStateT (runWriterT (apply instructions)) state)
+    let st = Password {password = end}
+        ((_, log), st') = runIdentity (runStateT (runWriterT (unApply instructions)) st)
+    in do 
+        -- putStrLn $ unlines $ map (action) log
+        putStrLn $ password st'
 
 
 apply :: [Instruction] -> App ()
