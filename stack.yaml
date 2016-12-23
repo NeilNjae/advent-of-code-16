@@ -1,7 +1,9 @@
 flags: {}
 extra-package-dbs: []
 packages:
-- '.'
+- adventofcode16
+- adventofcode1601
+- adventofcode1602
 system-ghc: true
 extra-deps:
 - astar-0.3.0.0
