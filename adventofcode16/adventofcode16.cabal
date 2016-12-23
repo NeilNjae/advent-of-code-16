@@ -332,6 +332,16 @@ executable advent22library
                      , hashable
   default-language:    Haskell2010
 
+executable advent23
+  hs-source-dirs:      app
+  main-is:             advent23.hs
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , adventofcode16
+                     , parsec
+                     , parsec-numbers
+                     , mtl
+  default-language:    Haskell2010
 
 executable adventofcode16-exe
   hs-source-dirs:      app
