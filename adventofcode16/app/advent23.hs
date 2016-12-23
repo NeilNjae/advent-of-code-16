@@ -160,14 +160,9 @@ writeValue m (Register r) v =
 
 
 instructionFile = instructionLine `sepEndBy` newline 
--- instructionLine = choice [cpyL, incL, decL, jnzL]
 instructionLine = incL <|> decL <|> cpyL <|> jnzL <|> tglL
 
--- incL = incify <$> (string "inc" *> spaces *> (oneOf "abcd"))
---         where incify r = Inc (Register r)
 incL = (Inc . Register) <$> (string "inc" *> spaces *> (oneOf "abcd"))
--- decL = decify <$> (string "dec" *> spaces *> (oneOf "abcd"))
---         where decify r = Dec (Register r)
 decL = (Dec . Register) <$> (string "dec" *> spaces *> (oneOf "abcd"))
 cpyL = cpyify <$> (string "cpy" *> spaces *> ((Literal <$> int) <|> ((Register . head) <$> (many1 letter))))
               <*> (spaces *> (oneOf "abcd"))
@@ -176,16 +171,6 @@ jnzL = jnzify <$> (string "jnz" *> spaces *> ((Literal <$> int) <|> ((Register .
               <*> (spaces *> ((Literal <$> int) <|> ((Register . head) <$> (many1 letter))))
         where jnzify r o = Jnz r o
 tglL = Tgl <$> (string "tgl" *> spaces *> ((Literal <$> int) <|> ((Register . head) <$> (many1 letter)))) 
-        -- where tglify r = Tgl r
-
-
--- readLocation :: Int -> Location
--- readLocation l = Literal l
-
--- readLocation :: String -> Location
--- readLocation l
---     | all (isDigit) l = Literal (read l)
---     | otherwise = Register (head l)
 
 parseIfile :: String -> Either ParseError [Instruction]
 parseIfile input = parse instructionFile "(unknown)" input
