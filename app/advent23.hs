@@ -21,7 +21,6 @@ data Machine = Machine { a :: Int
                        , instructions :: [Instruction]} 
                deriving (Show, Eq)
 
-
 testInstructions = "cpy 2 a\n\
 \tgl a\n\
 \tgl a\n\
@@ -29,7 +28,6 @@ testInstructions = "cpy 2 a\n\
 \cpy 1 a\n\
 \dec a\n\
 \dec a"
-
 
 emptyMachine :: Machine
 emptyMachine = Machine {a=0, b=0, c=0, d=0, pc=0, instructions=[]}
