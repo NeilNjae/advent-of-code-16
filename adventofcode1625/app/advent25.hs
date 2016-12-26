@@ -67,11 +67,6 @@ part1 instrs =
           inputs = [0..]
           validInputs = filter (validMachine) inputs
           validMachine i = valid $ evalMachine m0 i
-    -- let config = AppConfig {cfgMaxRun = 500000}
-    --     m0 = emptyMachine {instructions=instrs}
-    --     -- res = runState (runReaderT (runMachine "") config) st
-    --     res = evalState (runReaderT (runMachine "") config) m0
-    -- in print res -- (signal, st')
 
 
 valid :: String -> Bool
@@ -82,7 +77,7 @@ evalMachine machine0 input = evalState (runReaderT (runMachine "") config) m
     where m = machine0 {a = input}
           config = AppConfig {cfgMaxRun = 500000}
 
-runMachine :: String -> App -- State Machine String
+runMachine :: String -> App
 runMachine output = 
     do  cfg <- ask
         m <- get
@@ -92,7 +87,7 @@ runMachine output =
                     runMachine (output ++ thisOutput)
 
 
-executeStep :: App -- State Machine String
+executeStep :: App
 executeStep = 
     do  m <- get
         let i = (instructions m)!!(pc m)
