@@ -5,6 +5,7 @@ packages:
 - adventofcode1601
 - adventofcode1602
 - adventofcode1624
+- adventofcode1625
 system-ghc: true
 extra-deps:
 - astar-0.3.0.0
