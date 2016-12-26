@@ -2,7 +2,7 @@ name:                adventofcode1612
 version:             0.1.0.0
 synopsis:            Initial project template from stack
 description:         Please see README.md
-homepage:            https://github.com/neilnjae/adventofcode16#readme
+homepage:            https://git.njae.me.uk/?p=advent-of-code-16.git;a=blob_plain;f=README.html
 license:             BSD3
 license-file:        LICENSE
 author:              Neil Smith
@@ -45,4 +45,4 @@ test-suite adventofcode1612-test
 
 source-repository head
   type:     git
-  location: https://github.com/neilnjae/adventofcode16
+  location: git@git.njae.me.uk:advent-of-code-16
