@@ -63,6 +63,30 @@ executable advent11ps
                      , unordered-containers
   default-language:    Haskell2010
 
+executable advent11psm
+  hs-source-dirs:      app
+  main-is:             advent11psm.hs
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , adventofcode16
+                     , pqueue
+                     , hashable
+                     , containers
+                     , unordered-containers
+  default-language:    Haskell2010
+
+executable advent11psmh
+  hs-source-dirs:      app
+  main-is:             advent11psmh.hs
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , adventofcode16
+                     , pqueue
+                     , hashable
+                     , containers
+                     , unordered-containers
+  default-language:    Haskell2010
+
 test-suite adventofcode1611-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test

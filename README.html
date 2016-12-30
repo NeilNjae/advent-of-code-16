@@ -14,9 +14,27 @@
 </div>
 <p>Code to solve the <a href="http://adventofcode.com/2016/">Advent of Code</a> puzzles. This year, I'm trying to use the puzzles as a prompt to learn <a href="https://wiki.haskell.org/Haskell">Haskell</a>.</p>
 <p><a href="http://learnyouahaskell.com/chapters">Learn you a Haskell</a>, <a href="https://www.haskell.org/tutorial/index.html">Introduction to Haskell 98</a>, and <a href="https://hackage.haskell.org/">Hackage</a> are good resources.</p>
-<p>I'm using the basic Haskell Platform installation (install with</p>
-<pre><code>$ sudo aptitude install haskell-platform</code></pre>
+<h1 id="toolchain">Toolchain</h1>
+<p>I'm using the basic Haskell Platform installation, togeher with <code>Stack</code> to manage the packages and dependencies (install with</p>
+<pre><code>$ sudo aptitude install haskell-platform haskell-stack</code></pre>
 <p>).</p>
+<p>I have one package for each day, to save time waiting for Stack to check every executable before compiling what's changed. Each package needs a separate directory tree and a separate <code>.cabal</code> file.</p>
+<p>Compile with</p>
+<pre><code>stack build</code></pre>
+<p>or</p>
+<pre><code>stack build adventofcode1601</code></pre>
+<p>Run with</p>
+<pre><code>stack exec advent01</code></pre>
+<p>Run interactively with</p>
+<pre><code>stack ghci adventofcode1601:exe:advent01</code></pre>
+<p>To profile, use</p>
+<pre><code>stack build --executable-profiling --library-profiling -ghc-options=&quot;-fprof-auto -rtsopts&quot; adventofcode1601</code></pre>
+<p>then run with</p>
+<pre><code>stack exec -- advent01 +RTS -p -hy</code></pre>
+<h1 id="readme">Readme</h1>
+<p>Build this readme file wth</p>
+<pre><code>pandoc -s README.md &gt; README.html</code></pre>
+<h3 id="earlier-instructions-for-compiling-before-use-of-stack">Earlier instructions, for compiling before use of Stack</h3>
 <p>I'm also using some extra libraries. Before installing, run <code>cabal update</code> then set <code>library-profiling: True</code> in <code>~/.cabal/config</code> . Then install the packages with</p>
 <pre><code>$ cabal install MissingH
 $ cabal install parsec-numbers
@@ -30,8 +48,6 @@ $ cabal install pqueue</code></pre>
 <pre><code>ghc -O2 --make advent01.hs -prof -auto-all -caf-all -fforce-recomp -rstopts
 time ./advent01 +RTS -p -hy</code></pre>
 <p>and create the profile picture with <code>h2ps advent01.hp</code> .</p>
-<p>Build this readme file wth</p>
-<pre><code>pandoc -s README.md &gt; README.html</code></pre>
 <p>(Using the <a href="https://github.com/markdowncss/modest">Modest style</a>.)</p>
 </body>
 </html>

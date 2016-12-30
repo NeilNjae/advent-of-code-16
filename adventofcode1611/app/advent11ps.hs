@@ -12,7 +12,7 @@ module Main(main) where
 import GHC.Generics (Generic)
 
 -- import Prelude hiding (length, take, drop)
-import Data.List (subsequences, (\\), sort, sortOn, nub, findIndices)
+import Data.List (subsequences, (\\), sort, sortOn, nub, findIndices, intercalate)
 import Data.Ord (comparing)
 import Data.Char (isDigit)
 import Data.Maybe (fromMaybe)
@@ -22,19 +22,25 @@ import qualified Data.HashSet as S
 import qualified Data.Sequence as Q
 import Data.Sequence ((<|), (|>), (><))
 import Data.Foldable (toList, foldr')
+import Debug.Trace
 
 
-data Item = Generator String | Microchip String deriving (Show, Eq, Generic)
+data Item = Generator String | Microchip String deriving (Eq, Generic)
 instance Hashable Item
 type Floor = [Item]
-data Building = Building Int [Floor] deriving (Show, Eq, Generic)
+data Building = Building Int [Floor] deriving (Eq, Ord, Generic)
 instance Hashable Building
 data CBuilding = CBuilding Int Integer deriving (Show, Eq, Generic)
 instance Hashable CBuilding
+-- instance Hashable CBuilding where
+--     hashWithSalt s (CBuilding f fs) =
+--         s `hashWithSalt`
+--         f `hashWithSalt` fs
+
 type CBuildings = S.HashSet CBuilding
 data Agendum = Agendum {current :: Building, trail :: Q.Seq CBuilding, cost :: Int} deriving (Show, Eq)
 type Agenda = P.MinPQueue Int Agendum 
-type Candidates = S.HashSet (Int, Agendum)
+-- type Candidates = S.HashSet (Int, Agendum)
 
 instance Ord Item where
     compare (Generator a) (Generator b) = compare a b
@@ -42,8 +48,17 @@ instance Ord Item where
     compare (Generator _) (Microchip _) = LT
     compare (Microchip _) (Generator _) = GT
 
-instance Ord Building where
-    compare b1 b2 = comparing estimateCost b1 b2
+instance Show Item where
+    show (Generator a) = "G" ++ take 2 a
+    show (Microchip a) = "M" ++ take 2 a
+
+-- instance Ord Building where
+--     compare b1 b2 = comparing estimateCost b1 b2
+
+instance Show Building where
+    show (Building f floors) = (show f) ++ "<* " ++ (intercalate "; " $ map (showFloor) floors)
+        where showFloor fl = intercalate ", " $ map (show) fl
+
 
 building1 = Building 0 [
     (sort [Generator "polonium", Generator "thulium", 
@@ -94,8 +109,12 @@ canonical (Building f floors) = CBuilding f (read $ filter (isDigit) $ show $ so
 
 main :: IO ()
 main = do 
+    -- part0
     part1 
     part2 
+
+part0 :: IO ()
+part0 = print $ length $ trail $ fromMaybe (snd $ P.findMin $ initAgenda buildingTest) $ aStar (initAgenda buildingTest) S.empty
 
 part1 :: IO ()
 part1 = print $ length $ trail $ fromMaybe (snd $ P.findMin $ initAgenda buildingTest) $ aStar (initAgenda building1) S.empty
@@ -109,6 +128,7 @@ initAgenda b = P.singleton (estimateCost b) Agendum {current = b, trail = Q.empt
 aStar :: Agenda -> CBuildings -> Maybe Agendum
 -- aStar [] _ = Agendum {current=buildingTest, trail=[], cost=0}
 aStar agenda closed 
+    -- | trace ("Peeping " ++ (show $ fst $ P.findMin agenda) ++ ": " ++ (show reached) ++ " :: " ++ (show newAgenda)) False = undefined
     | P.null agenda = Nothing
     | otherwise = 
         if isGoal reached then Just currentAgendum
