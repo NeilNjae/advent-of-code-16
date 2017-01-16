@@ -66,6 +66,21 @@ executable advent22library
                      , hashable
   default-language:    Haskell2010
 
+executable advent22psm
+  hs-source-dirs:      app
+  main-is:             advent22psm.hs
+  ghc-options:         -O2 -threaded -rtsopts -with-rtsopts=-N
+  build-depends:       base
+                     , adventofcode1622
+                     , adventofcode16
+                     , parsec
+                     , parsec-numbers
+                     , hashable
+                     , pqueue
+                     , containers
+                     , unordered-containers
+  default-language:    Haskell2010
+
 test-suite adventofcode1622-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
